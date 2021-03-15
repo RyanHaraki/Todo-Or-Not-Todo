@@ -48,7 +48,8 @@ const ListName = styled.div`
     font-size: 2rem;
     cursor: pointer;
     border-radius: 50%;
-
+    overflow: hidden;
+    
     :hover {
       background: #e6e6e6;
     }

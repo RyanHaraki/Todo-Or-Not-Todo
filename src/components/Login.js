@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { auth, provider } from "../firebase";
+import db from '../firebase'
 
 const Login = (props) => {
   //Login with Google function
@@ -15,9 +16,40 @@ const Login = (props) => {
         };
         localStorage.setItem("user", JSON.stringify(newUser));
         props.setUser(newUser);
+        addUser(newUser.name, newUser.email, newUser.profileImage)
       })
       .catch((err) => alert(err.message));
   };
+
+  //Add user to firebase
+  const addUser = (name, email, photoURL) => {
+  
+    var docRef = db.collection("users").doc();
+
+    docRef.get().then((doc) => {
+        if (doc.exists) {
+            console.log("Document data:", doc.data());
+        } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+        }
+    }).catch((error) => {
+        console.log("Error getting document:", error);
+    });
+
+
+      db.collection("users").add({
+        name: name,
+        email: email,
+        photoUrl: photoURL,
+      })
+      .then(() => {
+        console.log("User logged to DB!");
+      })
+      .catch((error) => {
+        console.error("Error writing document: ", error);
+      });
+  }
 
   return (
     <Container>
